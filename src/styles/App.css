@@ -3,7 +3,7 @@
     justify-items: center;
     justify-content: center;
     display: flex;
-    gap: 20px;
+    gap: 30px;
     flex-wrap: wrap;
     align-items: center;
 }
@@ -33,6 +33,7 @@
     font-weight: bold;
     flex-direction: column;
     gap: 20px;
+    border-radius: 20px;
 }
 
 h1 {
