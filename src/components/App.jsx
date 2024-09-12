@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 import '../styles/App.css'
 
 // todo: remove all face_of_x then rename all face_of_x2 to face_of_x
+// todo: create difficulty setting with instructions modal
 const suits = ["clubs", "diamonds", "hearts", "spades"]
 const values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
     "ace", "jack", "king", "queen"]
@@ -12,7 +13,7 @@ values.forEach(value => {
     })
 })
 
-const cards = shuffleArray(all_cards).slice(0, 4)
+const cards = shuffleArray(all_cards).slice(0, 12)
 
 function App() {
     const [best_score, setBestScore] = useState(0)
@@ -38,16 +39,20 @@ function App() {
 
 
     return <>
-                <div id="scores">
-                    <div id="curr-score"> Current Score: {curr_score} </div>
-                    <div id="best-score"> Best Score: {best_score} </div>
-                </div>
+                <Scores curr_score={curr_score} best_score={best_score}/>
                 <div id="cards">
                     { shuffleArray(cards).map((link, index) =>
                         <Card key={index} link={link} handleClick={handleClick}/>)
                     }
                 </div>
             </>
+}
+
+function Scores({curr_score, best_score}) {
+    return <div id="scores">
+        <div id="curr-score"> Current Score: {curr_score} </div>
+        <div id="best-score"> Best Score: {best_score} </div>
+    </div>
 }
 
 function Card({link, handleClick}) {
