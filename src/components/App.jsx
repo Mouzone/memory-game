@@ -1,13 +1,18 @@
 import {useEffect, useState} from 'react'
 import '../styles/App.css'
 
-// todo: pick 12 random cards from cards
-const cards = [
-    "2_of_clubs",
-    "2_of_diamonds",
-    "2_of_hearts",
-    "2_of_spades",
-]
+// todo: remove all face_of_x then rename all face_of_x2 to face_of_x
+const suits = ["clubs", "diamonds", "hearts", "spades"]
+const values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "ace", "jack", "king", "queen"]
+const all_cards = ["red_joker", "black_joker"]
+values.forEach(value => {
+    suits.forEach(suit => {
+        all_cards.push(value + "_of_" + suit)
+    })
+})
+
+const cards = shuffleArray(all_cards).slice(0, 4)
 
 function App() {
     const [best_score, setBestScore] = useState(0)
