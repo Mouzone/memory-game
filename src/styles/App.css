@@ -3,3 +3,12 @@
     display: flex;
     gap: 20px;
 }
+
+#scores {
+    width: 60%;
+}
+
+#curr-score,
+#best-score {
+    text-align: right;
+}
