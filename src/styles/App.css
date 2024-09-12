@@ -1,5 +1,5 @@
 #cards {
-    width: 60%;
+    width: 40%;
     justify-items: center;
     justify-content: center;
     display: flex;
@@ -17,4 +17,36 @@
 #curr-score,
 #best-score {
     text-align: right;
+}
+
+#modal {
+    width: 50%;
+    height: 200px;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+    border: none;
+    box-shadow: 1px 1px 5px black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-direction: column;
+    gap: 20px;
+}
+
+h1 {
+    font-size: 20px;
+}
+
+button {
+    padding: 20px;
+    font-size: 20px;
+    border: none;
+    border-radius: 20px;
+}
+
+#buttons {
+    display: flex;
+    gap: 20px;
 }

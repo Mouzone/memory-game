@@ -4,24 +4,60 @@ import '../styles/App.css'
 // todo: remove all face_of_x then rename all face_of_x2 to face_of_x
 // todo: create difficulty setting with instructions modal
 const suits = ["clubs", "diamonds", "hearts", "spades"]
-const values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10",
     "ace", "jack", "king", "queen"]
-const all_cards = ["red_joker", "black_joker"]
+let all_cards = ["red_joker", "black_joker"]
 values.forEach(value => {
     suits.forEach(suit => {
         all_cards.push(value + "_of_" + suit)
     })
 })
-
-const cards = shuffleArray(all_cards).slice(0, 12)
+all_cards = shuffleArray(all_cards)
+let cards
 
 function App() {
+    // takes "instructions", "difficulty", "game", "endGame"
+    const [curr_screen, setCurrScreen] = useState("instructions")
+    function startGame(num_cards) {
+        cards = all_cards.slice(0, num_cards)
+        setCurrScreen("game")
+    }
+
+    if (curr_screen === "instructions") {
+        return <div id="modal">
+            <h1> Select unique cards consecutively without repetition </h1>
+            <button onClick={() => setCurrScreen("difficulty")}> Continue </button>
+        </div>
+    } else if (curr_screen === "difficulty") {
+        return <div id="modal">
+            <h1> Select Difficulty </h1>
+            <div id="buttons">
+                <button onClick={() => startGame(4)} style={{cursor:"pointer"}}> Easy </button>
+                <button onClick={() => startGame(8)} style={{cursor:"pointer"}}> Medium </button>
+                <button onClick={() => startGame(12)} style={{cursor:"pointer"}}> Hard </button>
+            </div>
+        </div>
+    } else if (curr_screen === "game") {
+        return <Game endGame={setCurrScreen}/>
+    } else {
+        return <div id="modal">
+            <p> You Won </p>
+            <button onClick={() => setCurrScreen("difficulty")}> Continue</button>
+        </div>
+    }
+}
+
+// on game over return game end state to App()
+function Game({endGame}) {
     const [best_score, setBestScore] = useState(0)
     const [curr_score, setCurrScore] = useState(0)
     const [seen, setSeen] = useState([])
 
-    function handleClick(link) {
+    if (best_score === cards.length) {
+        endGame("end")
+    }
 
+    function handleClick(link) {
         const new_curr_score = seen.includes(link)
             ? 0
             : curr_score + 1
