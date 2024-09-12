@@ -18,33 +18,46 @@ let cards
 function App() {
     // takes "instructions", "difficulty", "game", "endGame"
     const [curr_screen, setCurrScreen] = useState("instructions")
+    let text= "Select unique cards consecutively without repetition"
+
+    if (curr_screen === "game") {
+        return <Game endGame={setCurrScreen}/>
+    }
+
+    text = (text === "instructions") ?  "Select Difficulty" : text
+    text = (text === "end") ? "You Won" : text
+    return <Modal type={curr_screen}
+                  text={text}
+                  setCurrScreen={setCurrScreen}/>
+//     pass proper setCurrScreen with call to proper next screen
+
+}
+
+function Modal({type, text, setCurrScreen}) {
+    const button_mappings = {
+        4: "Easy",
+        8: "Medium",
+        12: "Hard"
+    }
+
     function startGame(num_cards) {
         cards = all_cards.slice(0, num_cards)
         setCurrScreen("game")
     }
 
-    if (curr_screen === "instructions") {
-        return <div id="modal">
-            <h1> Select unique cards consecutively without repetition </h1>
-            <button onClick={() => setCurrScreen("difficulty")}> Continue </button>
-        </div>
-    } else if (curr_screen === "difficulty") {
-        return <div id="modal">
-            <h1> Select Difficulty </h1>
-            <div id="buttons">
-                <button onClick={() => startGame(4)} style={{cursor:"pointer"}}> Easy </button>
-                <button onClick={() => startGame(8)} style={{cursor:"pointer"}}> Medium </button>
-                <button onClick={() => startGame(12)} style={{cursor:"pointer"}}> Hard </button>
-            </div>
-        </div>
-    } else if (curr_screen === "game") {
-        return <Game endGame={setCurrScreen}/>
-    } else {
-        return <div id="modal">
-            <p> You Won </p>
-            <button onClick={() => setCurrScreen("difficulty")}> Continue</button>
-        </div>
-    }
+    return <div id="modal">
+        <h1> {text} </h1>
+        {["instructions", "end"].includes(type) && <button onClick={() => setCurrScreen}> Continue </button>}
+        {type === "difficulty" && <div id="buttons"> {
+            Object.entries(button_mappings)
+                .map(([num_cards, label]) => {
+                    return <button key={label}
+                                   onClick={() => startGame(num_cards)}
+                                   style={{cursor: "pointer"}}>
+                        {label}
+                    </button>
+            })} </div>}
+    </div>
 }
 
 // on game over return game end state to App()
