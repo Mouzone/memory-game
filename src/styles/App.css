@@ -48,6 +48,18 @@ button {
     border-radius: 20px;
 }
 
+button:first-child {
+    background-color: yellowgreen;
+}
+
+button:nth-child(2) {
+    background-color: #fde047;
+}
+
+button:last-child {
+    background-color: #ef4444;
+}
+
 #buttons {
     display: flex;
     gap: 20px;
