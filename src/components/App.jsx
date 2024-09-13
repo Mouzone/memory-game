@@ -1,44 +1,43 @@
 import {useEffect, useState} from 'react'
 import '../styles/App.css'
 
-// todo: remove all face_of_x then rename all face_of_x2 to face_of_x
-const suits = ["clubs", "diamonds", "hearts", "spades"]
-const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10",
-    "ace", "jack", "king", "queen"]
-let all_cards = ["red_joker", "black_joker"]
-values.forEach(value => {
-    suits.forEach(suit => {
-        all_cards.push(value + "_of_" + suit)
+function generateCards() {
+    const suits = ["clubs", "diamonds", "hearts", "spades"]
+    const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10",
+        "ace", "jack", "king", "queen"]
+    const all_cards = ["red_joker", "black_joker"]
+    values.forEach(value => {
+        suits.forEach(suit => {
+            all_cards.push(value + "_of_" + suit)
+        })
     })
-})
+    return all_cards
+}
+
+const all_cards = generateCards()
 let cards
 
 function App() {
     // takes "instructions", "difficulty", "game", "endGame"
     const [curr_screen, setCurrScreen] = useState("instructions")
-    let text= "Select unique cards consecutively without repetition"
 
     function nextScreen(curr_screen) {
-        if (curr_screen === "instructions") {
-            setCurrScreen("difficulty")
-        } else if (curr_screen === "difficulty") {
-            setCurrScreen("game")
-        } else if (curr_screen === "game") {
-            setCurrScreen("end")
-        } else {
-            setCurrScreen("difficulty")
+        const screen_flow = {
+            "instructions": "difficulty",
+            "difficulty": "game",
+            "game": "end",
+            "end": "difficulty"
         }
+        setCurrScreen(screen_flow[curr_screen])
     }
 
-    if (curr_screen === "game") {
-        return <Game nextScreen={nextScreen}/>
-    }
-
+    let text= "Select unique cards consecutively without repetition"
     text = (curr_screen === "difficulty") ?  "Select Difficulty" : text
     text = (curr_screen === "end") ? "You Won" : text
-    return <Modal type={curr_screen}
-                  text={text}
-                  nextScreen={nextScreen}/>
+
+    return curr_screen === "game"
+        ? <Game nextScreen={nextScreen}/>
+        : <Modal type={curr_screen} text={text} nextScreen={nextScreen}/>
 }
 
 function Modal({type, text, nextScreen}) {
