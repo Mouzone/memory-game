@@ -2,7 +2,6 @@ import {useEffect, useState} from 'react'
 import '../styles/App.css'
 
 // todo: remove all face_of_x then rename all face_of_x2 to face_of_x
-// todo: create difficulty setting with instructions modal
 const suits = ["clubs", "diamonds", "hearts", "spades"]
 const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10",
     "ace", "jack", "king", "queen"]
@@ -113,7 +112,7 @@ function Scores({curr_score, best_score}) {
 
 function Card({link, handleClick}) {
     return <div onClick={() => handleClick(link)}>
-        <img src={`src/assets/cards/${link}.png`} alt="card"/>
+        <img src={`public/cards/${link}.png`} alt="card"/>
     </div>
 }
 
