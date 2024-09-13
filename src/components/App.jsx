@@ -12,7 +12,6 @@ values.forEach(value => {
         all_cards.push(value + "_of_" + suit)
     })
 })
-all_cards = shuffleArray(all_cards)
 let cards
 
 function App() {
@@ -20,39 +19,47 @@ function App() {
     const [curr_screen, setCurrScreen] = useState("instructions")
     let text= "Select unique cards consecutively without repetition"
 
-    if (curr_screen === "game") {
-        return <Game endGame={setCurrScreen}/>
+    function nextScreen(curr_screen) {
+        if (curr_screen === "instructions") {
+            setCurrScreen("difficulty")
+        } else if (curr_screen === "difficulty") {
+            setCurrScreen("game")
+        } else if (curr_screen === "game") {
+            setCurrScreen("end")
+        } else {
+            setCurrScreen("difficulty")
+        }
     }
 
-    text = (text === "instructions") ?  "Select Difficulty" : text
-    text = (text === "end") ? "You Won" : text
+    if (curr_screen === "game") {
+        return <Game nextScreen={nextScreen}/>
+    }
+
+    text = (curr_screen === "difficulty") ?  "Select Difficulty" : text
+    text = (curr_screen === "end") ? "You Won" : text
     return <Modal type={curr_screen}
                   text={text}
-                  setCurrScreen={setCurrScreen}/>
-//     pass proper setCurrScreen with call to proper next screen
-
+                  nextScreen={nextScreen}/>
 }
 
-function Modal({type, text, setCurrScreen}) {
+function Modal({type, text, nextScreen}) {
     const button_mappings = {
         4: "Easy",
         8: "Medium",
         12: "Hard"
     }
 
-    function startGame(num_cards) {
-        cards = all_cards.slice(0, num_cards)
-        setCurrScreen("game")
-    }
-
     return <div id="modal">
         <h1> {text} </h1>
-        {["instructions", "end"].includes(type) && <button onClick={() => setCurrScreen}> Continue </button>}
+        {["instructions", "end"].includes(type) && <button onClick={() => nextScreen(type)}> Continue </button>}
         {type === "difficulty" && <div id="buttons"> {
             Object.entries(button_mappings)
                 .map(([num_cards, label]) => {
                     return <button key={label}
-                                   onClick={() => startGame(num_cards)}
+                                   onClick={() => {
+                                       cards = shuffleArray(all_cards).slice(0, parseInt(num_cards))
+                                       nextScreen("difficulty")
+                                   }}
                                    style={{cursor: "pointer"}}>
                         {label}
                     </button>
@@ -60,15 +67,11 @@ function Modal({type, text, setCurrScreen}) {
     </div>
 }
 
-// on game over return game end state to App()
-function Game({endGame}) {
+function Game({nextScreen}) {
     const [best_score, setBestScore] = useState(0)
     const [curr_score, setCurrScore] = useState(0)
     const [seen, setSeen] = useState([])
 
-    if (best_score === cards.length) {
-        endGame("end")
-    }
 
     function handleClick(link) {
         const new_curr_score = seen.includes(link)
@@ -80,6 +83,10 @@ function Game({endGame}) {
         const new_seen = seen.includes(link)
             ? []
             : [...seen, link]
+
+        if (new_best_score === cards.length) {
+            nextScreen("game")
+        }
 
         setCurrScore(new_curr_score)
         setBestScore(new_best_score)
