@@ -112,7 +112,7 @@ function Scores({curr_score, best_score}) {
 
 function Card({link, handleClick}) {
     return <div onClick={() => handleClick(link)}>
-        <img src={`public/cards/${link}.png`} alt="card"/>
+        <img src={`/cards/${link}.png`} alt="card"/>
     </div>
 }
 
